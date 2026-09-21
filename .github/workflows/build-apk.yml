@@ -30,7 +30,7 @@ jobs:
             exit 1
           fi
           yes | "$SDKMANAGER" --licenses >/dev/null || true
-          "$SDKMANAGER" "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+          "$SDKMANAGER" "platform-tools" "platforms;android-37.1" "build-tools;36.0.0"
 
       - name: Set up Gradle 9.6
         uses: gradle/actions/setup-gradle@v4
@@ -46,8 +46,21 @@ jobs:
           rm -rf build-src
           mkdir build-src
           unzip -q /tmp/WristHubWearOS.zip -d build-src
-          sed -i 's/compileSdk = 37/compileSdk = 35/' build-src/WristHubWearOS/app/build.gradle.kts
-          grep -n "compileSdk" build-src/WristHubWearOS/app/build.gradle.kts
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("build-src/WristHubWearOS/app/build.gradle.kts")
+          s = p.read_text()
+          s = s.replace(
+              "    compileSdk = 37",
+              """    compileSdk {
+                  version = release(37) {
+                      minorApiLevel = 1
+                  }
+              }"""
+          )
+          p.write_text(s)
+          PY
+          grep -A5 -n "compileSdk" build-src/WristHubWearOS/app/build.gradle.kts
 
       - name: Build debug APK
         working-directory: build-src/WristHubWearOS
