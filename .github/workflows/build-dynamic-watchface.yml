@@ -1,0 +1,35 @@
+name: Build WristHub Dynamic Watch Face
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "wristhub-face-dynamic-wff" ]
+    paths:
+      - "watchface-dynamic-wff/**"
+      - ".github/workflows/build-dynamic-watchface.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.10.2"
+      - name: Build debug APK
+        working-directory: watchface-dynamic-wff
+        run: gradle --no-daemon :watchface:assembleDebug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: WristHub-Dynamic-WatchFace
+          path: watchface-dynamic-wff/watchface/build/outputs/apk/debug/watchface-debug.apk
+          if-no-files-found: error
+          retention-days: 14
