@@ -46,6 +46,19 @@ jobs:
           rm -rf build-v3
           mkdir build-v3
           unzip -q /tmp/WristHubSenseV3.zip -d build-v3
+          python3 - <<'PY'
+          from pathlib import Path
+          manifest = Path("build-v3/WristHubV3/mobile/src/main/AndroidManifest.xml")
+          s = manifest.read_text()
+          s = s.replace("@android:style/Theme.DeviceDefault.DayNight.NoActionBar", "@android:style/Theme.DeviceDefault.NoActionBar")
+          manifest.write_text(s)
+
+          service = Path("build-v3/WristHubV3/mobile/src/main/java/com/wristhub/sense/mobile/notifications/SemanticNotificationService.kt")
+          s = service.read_text()
+          s = s.replace("context.getSharedPreferences(PREFS, MODE_PRIVATE)", "context.getSharedPreferences(PREFS, android.content.Context.MODE_PRIVATE)")
+          s = s.replace("requestRebind(ComponentName(context, SemanticNotificationService::class.java))", "NotificationListenerService.requestRebind(ComponentName(context, SemanticNotificationService::class.java))")
+          service.write_text(s)
+          PY
 
       - name: Unit tests
         working-directory: build-v3/WristHubV3
