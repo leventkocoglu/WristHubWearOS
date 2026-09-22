@@ -23,12 +23,29 @@ jobs:
         with:
           gradle-version: "8.10.2"
       - name: Build debug APK
+        id: build
         working-directory: watchface-dynamic-wff
-        run: gradle --no-daemon :watchface:assembleDebug
+        shell: bash
+        run: |
+          set +e
+          gradle --no-daemon :watchface:assembleDebug 2>&1 | tee build.log
+          code=${PIPESTATUS[0]}
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Upload build log
+        uses: actions/upload-artifact@v4
+        with:
+          name: WristHub-Dynamic-BuildLog
+          path: watchface-dynamic-wff/build.log
+          retention-days: 2
       - name: Upload APK
+        if: steps.build.outputs.exit_code == '0'
         uses: actions/upload-artifact@v4
         with:
           name: WristHub-Dynamic-WatchFace
           path: watchface-dynamic-wff/watchface/build/outputs/apk/debug/watchface-debug.apk
           if-no-files-found: error
           retention-days: 14
+      - name: Fail if build failed
+        if: steps.build.outputs.exit_code != '0'
+        run: exit 1
