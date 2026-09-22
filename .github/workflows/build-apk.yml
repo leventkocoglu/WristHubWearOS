@@ -1,9 +1,9 @@
-name: Build Wear OS APK
+name: Build WristHub Sense V3
 
 on:
   workflow_dispatch:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "wristhub-v3-semantic" ]
 
 permissions:
   contents: read
@@ -37,39 +37,43 @@ jobs:
         with:
           gradle-version: "9.6.0"
 
-      - name: Rebuild WristHub archive
+      - name: Rebuild WristHub Sense V3 source
         run: |
-          cat archive_parts/part*.b64 > /tmp/wristhub.b64
-          tr -d '\n\r ' < /tmp/wristhub.b64 | base64 -d > /tmp/WristHubWearOS.zip
-          echo "3b79e200e761e017207f799ba59f50d5abb2a69d0acc460c4f58538ac7c2b59c  /tmp/WristHubWearOS.zip" | sha256sum -c -
-          unzip -t /tmp/WristHubWearOS.zip
-          rm -rf build-src
-          mkdir build-src
-          unzip -q /tmp/WristHubWearOS.zip -d build-src
+          cat v3_parts/part*.b64 > /tmp/wristhub-v3.b64
+          tr -d '\n\r ' < /tmp/wristhub-v3.b64 | base64 -d > /tmp/WristHubSenseV3.zip
+          echo "91056e83187acd981e4aedd895c6f06b0994026bfbeeb9a2d91a645c1ebb085d  /tmp/WristHubSenseV3.zip" | sha256sum -c -
+          unzip -t /tmp/WristHubSenseV3.zip
+          rm -rf build-v3
+          mkdir build-v3
+          unzip -q /tmp/WristHubSenseV3.zip -d build-v3
           python3 - <<'PY'
           from pathlib import Path
-          p = Path("build-src/WristHubWearOS/app/build.gradle.kts")
-          s = p.read_text()
-          s = s.replace(
-              "    compileSdk = 37",
-              """    compileSdk {
-                  version = release(37) {
-                      minorApiLevel = 1
-                  }
-              }"""
-          )
-          p.write_text(s)
+          manifest = Path("build-v3/WristHubV3/mobile/src/main/AndroidManifest.xml")
+          s = manifest.read_text()
+          s = s.replace("@android:style/Theme.DeviceDefault.DayNight.NoActionBar", "@android:style/Theme.DeviceDefault.NoActionBar")
+          manifest.write_text(s)
+
+          service = Path("build-v3/WristHubV3/mobile/src/main/java/com/wristhub/sense/mobile/notifications/SemanticNotificationService.kt")
+          s = service.read_text()
+          s = s.replace("context.getSharedPreferences(PREFS, MODE_PRIVATE)", "context.getSharedPreferences(PREFS, android.content.Context.MODE_PRIVATE)")
+          s = s.replace("requestRebind(ComponentName(context, SemanticNotificationService::class.java))", "NotificationListenerService.requestRebind(ComponentName(context, SemanticNotificationService::class.java))")
+          service.write_text(s)
           PY
-          grep -A5 -n "compileSdk" build-src/WristHubWearOS/app/build.gradle.kts
 
-      - name: Build debug APK
-        working-directory: build-src/WristHubWearOS
-        run: gradle --no-daemon assembleDebug
+      - name: Unit tests
+        working-directory: build-v3/WristHubV3
+        run: gradle --no-daemon :mobile:testDebugUnitTest
 
-      - name: Upload APK
+      - name: Build phone and watch APKs
+        working-directory: build-v3/WristHubV3
+        run: gradle --no-daemon :mobile:assembleDebug :wear:assembleDebug
+
+      - name: Upload WristHub Sense V3 APKs
         uses: actions/upload-artifact@v4
         with:
-          name: WristHub-debug-apk
-          path: build-src/WristHubWearOS/app/build/outputs/apk/debug/app-debug.apk
+          name: WristHub-Sense-V3
+          path: |
+            build-v3/WristHubV3/mobile/build/outputs/apk/debug/mobile-debug.apk
+            build-v3/WristHubV3/wear/build/outputs/apk/debug/wear-debug.apk
           if-no-files-found: error
           retention-days: 14
