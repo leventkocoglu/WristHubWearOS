@@ -2,7 +2,6 @@ plugins {
     id("com.android.application")
 }
 android {
-    enableKotlin = false
     namespace = "com.wristhub.dynamicface"
     compileSdk = 35
     defaultConfig {
