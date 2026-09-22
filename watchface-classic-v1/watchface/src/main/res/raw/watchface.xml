@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WatchFace width="450" height="450">
+  <Metadata key="CLOCK_TYPE" value="ANALOG"/>
+  <Metadata key="PREVIEW_TIME" value="10:08:32"/>
+
+  <Scene backgroundColor="#000000">
+    <PartImage x="0" y="0" width="450" height="450">
+      <Image resource="dial"/>
+      <Variant mode="AMBIENT" target="alpha" value="0"/>
+    </PartImage>
+
+    <PartDraw x="0" y="0" width="450" height="450" alpha="0">
+      <Variant mode="AMBIENT" target="alpha" value="255"/>
+      <Ellipse x="4" y="4" width="442" height="442"><Fill color="#000000"/></Ellipse>
+      <Ellipse x="34" y="34" width="382" height="382"><Stroke color="#FF8A8A8A" width="2"/></Ellipse>
+    </PartDraw>
+
+    <PartText x="342" y="205" width="44" height="40">
+      <Variant mode="AMBIENT" target="alpha" value="0"/>
+      <Text align="CENTER">
+        <Font family="SYNC_TO_DEVICE" size="25" weight="BOLD" color="#FF202020">
+          <Template><![CDATA[%d]]><Parameter expression="[DAY]"/></Template>
+        </Font>
+      </Text>
+    </PartText>
+
+    <PartText x="102" y="269" width="86" height="52">
+      <Variant mode="AMBIENT" target="alpha" value="0"/>
+      <Text align="CENTER">
+        <Font family="SYNC_TO_DEVICE" size="21" weight="BOLD" color="#FF202020">
+          <Template><![CDATA[%d]]><Parameter expression="[STEP_COUNT]"/></Template>
+        </Font>
+      </Text>
+    </PartText>
+    <PartText x="102" y="305" width="86" height="24">
+      <Variant mode="AMBIENT" target="alpha" value="0"/>
+      <Text align="CENTER"><Font family="SYNC_TO_DEVICE" size="12" color="#FF6A6A6A">ADIM</Font></Text>
+    </PartText>
+
+    <PartText x="262" y="269" width="86" height="52">
+      <Variant mode="AMBIENT" target="alpha" value="0"/>
+      <Text align="CENTER">
+        <Font family="SYNC_TO_DEVICE" size="21" weight="BOLD" color="#FF202020">
+          <Template><![CDATA[%d]]><Parameter expression="round([HEART_RATE])"/></Template>
+        </Font>
+      </Text>
+    </PartText>
+    <PartText x="262" y="305" width="86" height="24">
+      <Variant mode="AMBIENT" target="alpha" value="0"/>
+      <Text align="CENTER"><Font family="SYNC_TO_DEVICE" size="12" color="#FF6A6A6A">BPM</Font></Text>
+    </PartText>
+
+    <PartText x="194" y="302" width="62" height="22">
+      <Variant mode="AMBIENT" target="alpha" value="0"/>
+      <Text align="CENTER">
+        <Font family="SYNC_TO_DEVICE" size="12" weight="NORMAL" color="#FF7A7A7A">
+          <Template><![CDATA[%d%%]]><Parameter expression="[BATTERY_PERCENT]"/></Template>
+        </Font>
+      </Text>
+    </PartText>
+
+    <DigitalClock x="170" y="337" width="110" height="44">
+      <Variant mode="AMBIENT" target="alpha" value="0"/>
+      <TimeText format="hh:mm" hourFormat="SYNC_TO_DEVICE" align="CENTER" x="0" y="0" width="110" height="44">
+        <Font family="SYNC_TO_DEVICE" size="30" weight="BOLD" color="#FF202020"/>
+      </TimeText>
+    </DigitalClock>
+
+    <DigitalClock x="135" y="292" width="180" height="70" alpha="0">
+      <Variant mode="AMBIENT" target="alpha" value="255"/>
+      <TimeText format="hh:mm" hourFormat="SYNC_TO_DEVICE" align="CENTER" x="0" y="0" width="180" height="70">
+        <Font family="SYNC_TO_DEVICE" size="54" weight="THIN" color="#FFFFFFFF"/>
+      </TimeText>
+    </DigitalClock>
+
+    <AnalogClock x="0" y="0" width="450" height="450">
+      <HourHand resource="hour" x="212" y="47" width="26" height="190" pivotX="0.5" pivotY="0.88"/>
+      <MinuteHand resource="minute" x="215" y="17" width="20" height="220" pivotX="0.5" pivotY="0.90"/>
+      <SecondHand resource="second" x="221" y="10" width="8" height="245" pivotX="0.5" pivotY="0.857142857">
+        <Variant mode="AMBIENT" target="alpha" value="0"/>
+        <Sweep frequency="15"/>
+      </SecondHand>
+    </AnalogClock>
+
+    <PartDraw x="216" y="216" width="18" height="18">
+      <Ellipse x="0" y="0" width="18" height="18"><Fill color="#FFB8B8B8"/></Ellipse>
+      <Ellipse x="5" y="5" width="8" height="8"><Fill color="#FF4C4C4C"/></Ellipse>
+    </PartDraw>
+  </Scene>
+</WatchFace>
