@@ -36,6 +36,7 @@ jobs:
           rm -rf build-carlog
           mkdir build-carlog
           unzip -q /tmp/CarLogPremium-source.zip -d build-carlog
+          printf 'android.useAndroidX=true\nandroid.enableJetifier=true\n' > build-carlog/gradle.properties
 
       - name: Build debug APK
         working-directory: build-carlog
