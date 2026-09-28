@@ -253,3 +253,4 @@ public class GarageActivity extends AppCompatActivity {
     private String value(EditText e) { return e.getText() == null ? "" : e.getText().toString().trim(); }
     private int dp(int v) { return (int)(v * getResources().getDisplayMetrics().density + .5f); }
 }
+\n
