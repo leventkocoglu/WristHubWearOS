@@ -1,2 +1,2 @@
 Final corrected V2 build trigger
-\nretry-no-sha\nretry-unzip-only
+\nretry-no-sha\nretry-unzip-only\nmanifest-repair
