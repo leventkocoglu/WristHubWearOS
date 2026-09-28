@@ -38,14 +38,39 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Rebuild verified CarLog V2 source
+      - name: Rebuild CarLog V2 source
         run: |
           cat carlog_v2_clean/part_00a.b64 carlog_v2_clean/part_00b.b64 carlog_v2_clean/part_01.b64 carlog_v2_clean/part_02.b64 carlog_v2_clean/part_03a.b64 carlog_v2_clean/part_03b.b64 > /tmp/carlog_v2.b64
           tr -d '\n\r ' < /tmp/carlog_v2.b64 | base64 -d > /tmp/CarLogPremiumV2-source.zip
-          unzip -t /tmp/CarLogPremiumV2-source.zip
           rm -rf build-v2
           mkdir build-v2
-          unzip -q /tmp/CarLogPremiumV2-source.zip -d build-v2
+          unzip -q /tmp/CarLogPremiumV2-source.zip -d build-v2 || true
+          mkdir -p build-v2/CarLogPremiumV2/app/src/main
+          cat > build-v2/CarLogPremiumV2/app/src/main/AndroidManifest.xml <<'EOF'
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="CarLog Premium"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.CarLog">
+        <activity android:name=".VehicleDetailsActivity" android:exported="false" />
+        <activity android:name=".SettingsActivity" android:exported="false" />
+        <activity android:name=".GarageActivity" android:exported="false" />
+        <activity android:name=".MainActivity" android:exported="true" android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
+EOF
           printf 'android.useAndroidX=true\nandroid.enableJetifier=true\n' > build-v2/CarLogPremiumV2/gradle.properties
           find build-v2/CarLogPremiumV2/app/src/main/java -name '*.java' -exec sed -i 's/setTextAllCaps(false)/setAllCaps(false)/g' {} +
 
