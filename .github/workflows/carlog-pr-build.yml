@@ -47,7 +47,7 @@ jobs:
           rm -rf build-v2
           mkdir build-v2
           unzip -q /tmp/CarLogPremiumV2-source.zip -d build-v2
-          printf 'android.useAndroidX=true\nandroid.enableJetifier=true\n' > build-v2/CarLogPremiumV2/gradle.properties
+          printf 'android.useAndroidX=true\nandroid.enableJetifier=true\n' > build-v2/CarLogPremiumV2/gradle.properties\n          find build-v2/CarLogPremiumV2/app/src/main/java -name '*.java' -exec sed -i 's/setTextAllCaps(false)/setAllCaps(false)/g' {} +
 
       - name: Build V2 debug APK
         working-directory: build-v2/CarLogPremiumV2
