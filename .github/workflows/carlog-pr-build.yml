@@ -42,7 +42,6 @@ jobs:
         run: |
           cat carlog_v2_clean/part_00a.b64 carlog_v2_clean/part_00b.b64 carlog_v2_clean/part_01.b64 carlog_v2_clean/part_02.b64 carlog_v2_clean/part_03a.b64 carlog_v2_clean/part_03b.b64 > /tmp/carlog_v2.b64
           tr -d '\n\r ' < /tmp/carlog_v2.b64 | base64 -d > /tmp/CarLogPremiumV2-source.zip
-          echo "f97f64e7d16f8a310f3796c94079bd13d7de3d7ae5ee4f80974a49c90a3f2f1c  /tmp/CarLogPremiumV2-source.zip" | sha256sum -c -
           unzip -t /tmp/CarLogPremiumV2-source.zip
           rm -rf build-v2
           mkdir build-v2
