@@ -51,7 +51,7 @@ jobs:
 
       - name: Build V2 debug APK
         working-directory: build-v2/CarLogPremiumV2
-        run: gradle --no-daemon :app:assembleDebug
+        run: gradle --no-daemon -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true :app:assembleDebug
 
       - name: Upload V2 APK
         uses: actions/upload-artifact@v4
