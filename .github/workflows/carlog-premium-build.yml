@@ -3,8 +3,6 @@ name: Build CarLog Premium APK
 on:
   push:
     branches: [ "carlog-premium" ]
-  pull_request:
-    branches: [ "main" ]
   workflow_dispatch:
 
 permissions:
@@ -13,6 +11,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,6 +22,12 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android 35 SDK
+        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
@@ -30,8 +35,9 @@ jobs:
 
       - name: Rebuild CarLog source
         run: |
-          cat carlog_parts/part*.b64 > /tmp/carlog.b64
+          cat             carlog_parts/part_00.b64             carlog_parts/part_01.b64             carlog_parts/part_02.b64             carlog_parts/part_03.b64             carlog_parts/part_04.b64             carlog_parts/part_05.b64             carlog_parts/part_06.b64             carlog_parts/part_07.b64             > /tmp/carlog.b64
           tr -d '\n\r ' < /tmp/carlog.b64 | base64 -d > /tmp/CarLogPremium-source.zip
+          echo "90119006c4faabbb143acbe74053c2c327b6b8bb16f9f60c99ce6f9b1c05698f  /tmp/CarLogPremium-source.zip" | sha256sum -c -
           unzip -t /tmp/CarLogPremium-source.zip
           rm -rf build-carlog
           mkdir build-carlog
