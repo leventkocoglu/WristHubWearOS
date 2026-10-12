@@ -1,34 +1,15 @@
-# WristHub 2.0 — Wear OS “Sıradaki Eylem”
+# WorkFlow English v1
 
-WristHub 2.0, saatte uzun görev listeleri göstermek yerine **o anda yapılacak tek küçük eylemi** öne çıkaran offline-first Wear OS uygulamasıdır.
+15 lojistik senaryosu ile iş İngilizcesi ve Theory of Constraints karar pratiği. Tüm kayıtlar cihazda kalır. Kurumsal veri veya gerçek müşteri bilgisi içermez.
 
-## 2.0'da neler değişti?
+## Kullanım
+WorkFlow-English.html dosyasını modern tarayıcıda açın. Karar verin, kısa İngilizce yanıt yazın, kontrol listesini ve örnek yanıtı inceleyin. Yanlış kararlar Tekrar bölümünde saklanır. Seslendirme tarayıcı/cihaz desteğine bağlıdır; Android WebView üzerinde mevcut olmayabilir.
 
-- Ana ekran artık “Sıradaki Eylem” odaklıdır.
-- Eylem doğrudan **Tamam / +10 dk Ertele / Atla** ile yönetilir.
-- Rutinler cihazda kalıcı tutulur; hesap veya backend gerekmez.
-- Zamanı gelen rutin için yerel bildirim ve haptik uyarı vardır.
-- Bildirim üzerinden uygulamayı açmadan Tamam / +10 dk / Atla yapılabilir.
-- Wear OS **Tile** eklendi: sıradaki eylem ve kalan süre bir bakışta görünür.
-- Saat yüzü için **SHORT_TEXT complication** veri kaynağı eklendi.
-- Gizli önizleme modu; bildirim, Tile ve complication üzerinde hassas metni saklayabilir.
-- Hazır rutin şablonları eklendi.
-- Saatten sesle yeni rutin ekleme eklendi.
-- Günlük tamamlanan / atlanan eylem sayacı vardır.
-- Eski Odak, Su ve Sayaç özellikleri “Araçlar” bölümünde korunur.
+## Android
+Projeyi Android Studio ile açın. JDK 17, Android SDK 35 ve Gradle 8.9 kullanın. Gradle wrapper bu pakete eklenmemiştir. Android Studio Gradle ayarlarında yerel Gradle 8.9 dağıtımını seçin veya Gradle 8.9 kurulu ortamda `gradle wrapper --gradle-version 8.9` çalıştırın. Ardından `./gradlew assembleDebug`. Çıktı: app/build/outputs/apk/debug/app-debug.apk. Bağımlılıkları ilk indirme için internet gereklidir.
 
-## Teknik yapı
+Bu ortamda Android SDK/Gradle bulunmadığı için APK derlenmemiştir; Android kaynakları derleme doğrulamasından geçmemiştir. Web sürümü ayrı sunulmuştur. Yazılı yanıt değerlendirmesi anahtar ifade kontrolüdür, yapay zekâ veya gramer denetimi değildir.
 
-- Kotlin
-- Jetpack Compose for Wear OS Material 3
-- Wear Tiles
-- ProtoLayout / Material 3
-- Wear complication data source
-- DataStore Preferences
-- AlarmManager tabanlı yerel zamanlama
-- compileSdk 37 / targetSdk 35 / minSdk 30
-- JDK 17
-
-## Otomatik APK
-
-GitHub Actions içindeki **Build Wear OS APK** workflow’u her push’ta debug APK üretir. Çıktı, workflow run sayfasındaki **Artifacts** bölümünden indirilebilir.
+## TOC kaynağı
+https://www.tocinstitute.org/five-focusing-steps.html
+Belirli bir kitabın tam metni kullanılmamıştır. Özgün senaryolar beş odaklanma adımından esinlenir.
