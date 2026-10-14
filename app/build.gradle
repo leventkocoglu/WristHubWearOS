@@ -1,4 +1,4 @@
 plugins { id 'com.android.application' }
 android { namespace 'com.workflow.english'; compileSdk 35
- defaultConfig { applicationId 'com.workflow.english.v2'; minSdk 26; targetSdk 35; versionCode 10; versionName '10.0' }
+ defaultConfig { applicationId 'com.workflow.english.v10'; minSdk 26; targetSdk 35; versionCode 10; versionName '10.0' }
 }
