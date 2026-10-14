@@ -31,14 +31,14 @@ jobs:
       - run: node tests/ui.cjs
       - run: gradle assembleDebug --no-daemon
       - run: $ANDROID_HOME/build-tools/35.0.0/apksigner verify --print-certs app/build/outputs/apk/debug/app-debug.apk
-      - run: cp app/build/outputs/apk/debug/app-debug.apk WorkFlow-English-V2.apk
+      - run: cp app/build/outputs/apk/debug/app-debug.apk WorkFlow-English-V10.apk
       - uses: actions/upload-artifact@v4
         with:
-          name: WorkFlow-English-V2
-          path: WorkFlow-English-V2.apk
+          name: WorkFlow-English-V10
+          path: WorkFlow-English-V10.apk
           if-no-files-found: error
       - uses: actions/upload-artifact@v4
         with:
-          name: WorkFlow-English-V2-QA
-          path: home-v2.png
+          name: WorkFlow-English-V10-QA
+          path: '*-v10.png'
           if-no-files-found: error

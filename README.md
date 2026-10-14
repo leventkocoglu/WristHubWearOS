@@ -1,17 +1,15 @@
-# WorkFlow English V2
+# WorkFlow English — Engineer V10
 
-Offline Android learning app with 15 logistics cases, a six-decision shift with saved outcomes and drafts, 24 English phrase cards, TOC learning notes and an M/M/1 queue laboratory.
+10 complete modules: 40 engineering/logistics cases, 2 saved decision shifts, 8 numerical tools, 12 mini lessons, 40 English phrases, due-card review, daily case, local English writing support, progress/favorites/notes, themes and JSON backup. No network API or AI evaluation.
+
+## Install / continuity
+Uses existing V2 application ID com.workflow.english.v2, versionCode 10. Uses same cached test signing key when available. V2 XP and logistics drafts migrate into a separate V10 store; V2 data remains intact. Other V2 statistics do not migrate. Android TextToSpeech depends on installed English voices.
 
 ## Models
-The shift uses explicit educational consequence scores and is not a numerical queue simulation. The queue laboratory uses analytical steady-state M/M/1 formulas with Poisson arrivals, independent exponential service times, one server, FCFS and unlimited capacity/population. Finite steady-state averages require arrival rate below service rate. A separate four-hour deterministic fluid backlog example is clearly labeled.
+Takt / capacity; OEE; EOQ; reorder point; Little law; steady-state M/M/1; exact bounded enumeration of two integer products under one capacity constraint; simplified Kanban count. All tools disclose assumptions/units, reject invalid input, and do not present M/M/1 finite waiting at lambda >= mu. Product mix enumeration capped at 10,000 A candidates. Shift backlog indicator is an educational score, separate from all queue models. Problem numeric tolerance is 0.5% or 0.005 for zero. All content is original; no book exercises are copied.
 
-## English support
-Local phrase/action/time checks and a few explicit error patterns; no AI grammar analysis. Android TextToSpeech uses the installed phone engine and available English voice. Phrase reviews are self-rated, ordered by due time, and scheduled at 10 minutes or 1/3/7 days.
+## Sources
+Goldratt: What Is This Thing Called Theory of Constraints and How Should It Be Implemented? Concepts verified against https://www.toc-goldratt.com/en/about-toc and https://www.goldrattresearchlabs.com/introduction-to-toc . Lean takt: https://www.lean.org/lexicon-terms/takt-time/ . OEE: https://www.oee.com/calculating-oee/ . Queue topics also informed by user-supplied Birth–Death Processes notes (Smimulation Theory.pdf). Full book text not used.
 
-## TOC source framework
-E. M. Goldratt, What Is This Thing Called Theory of Constraints and How Should It Be Implemented?; https://www.toc-goldratt.com/en/about-toc and https://www.tocinstitute.org/five-focusing-steps.html. Original scenarios, no full book text or reproduced exercises. Queue topic also informed by the user-supplied Birth-Death Processes lecture notes (Smimulation Theory.pdf).
-
-## Build and validation
-JDK 17, Gradle 8.9, Android SDK 35. Run `node tests/logic.cjs`, `npm install --no-save playwright@1.51.1`, `npx playwright install chromium`, `node tests/ui.cjs`, then `gradle assembleDebug`. GitHub Actions runs checks and uploads the APK.
-
-V2 uses application ID com.workflow.english.v2 and installs alongside V1, retaining V1 data separately. No automatic migration of V1 progress. A cached debug key supports subsequent V2 updates while the cache remains available. Debug builds are for testing.
+## Build / tests
+JDK 17, Gradle 8.9, Android SDK 35. `node tests/logic.cjs`; install Playwright 1.51.1 and Chromium, then `node tests/ui.cjs`; `gradle assembleDebug`. CI runs logic and responsive mobile UI tests, verifies the APK signature, and uploads APK and QA screenshots. Physical-device testing remains separate.

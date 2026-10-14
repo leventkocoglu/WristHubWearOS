@@ -9,7 +9,7 @@ public class MainActivity extends Activity {
  private WebView web;
  private android.speech.tts.TextToSpeech tts;
  private boolean speechReady=false;
- public class SpeechBridge { @android.webkit.JavascriptInterface public void speak(String text) { runOnUiThread(() -> { if(speechReady) tts.speak(text,android.speech.tts.TextToSpeech.QUEUE_FLUSH,null,"workflow"); else android.widget.Toast.makeText(MainActivity.this,"İngilizce ses hazır değil. Telefonun metin okuma ayarlarını kontrol et.",android.widget.Toast.LENGTH_LONG).show(); }); } }
+ public class SpeechBridge { @android.webkit.JavascriptInterface public void copy(String text) { runOnUiThread(() -> { android.content.ClipboardManager cm=(android.content.ClipboardManager)getSystemService(CLIPBOARD_SERVICE); cm.setPrimaryClip(android.content.ClipData.newPlainText("WorkFlow backup",text)); }); } @android.webkit.JavascriptInterface public void speak(String text) { runOnUiThread(() -> { if(speechReady) tts.speak(text,android.speech.tts.TextToSpeech.QUEUE_FLUSH,null,"workflow"); else android.widget.Toast.makeText(MainActivity.this,"İngilizce ses hazır değil. Telefonun metin okuma ayarlarını kontrol et.",android.widget.Toast.LENGTH_LONG).show(); }); } }
  @Override public void onCreate(Bundle state) {
   super.onCreate(state);
   tts=new android.speech.tts.TextToSpeech(this,status -> { if(status==android.speech.tts.TextToSpeech.SUCCESS) { int result=tts.setLanguage(java.util.Locale.UK); speechReady=result>=0; tts.setSpeechRate(0.86f); } });
@@ -36,6 +36,6 @@ public class MainActivity extends Activity {
   });
   web.loadUrl("https://app.local/index.html");
  }
- @Override public void onBackPressed() { if(web.canGoBack()) web.goBack(); else super.onBackPressed(); }
+ @Override public void onBackPressed() { web.evaluateJavascript("(function(){if(typeof route!=='undefined' && route!=='home'){home();return true;}return false;})()", value -> { if(!"true".equals(value)) finish(); }); }
  @Override protected void onDestroy() { if(tts!=null){tts.stop();tts.shutdown();} web.removeJavascriptInterface("NativeSpeech"); web.destroy(); super.onDestroy(); }
 }
