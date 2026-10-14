@@ -21,10 +21,18 @@ jobs:
         with:
           gradle-version: '8.9'
       - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      - uses: actions/cache@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: workflow-english-v2-debug-key
+      - run: node tests/logic.cjs
+      - run: npm install --no-save playwright@1.51.1
+      - run: npx playwright install --with-deps chromium
+      - run: node tests/ui.cjs
       - run: gradle assembleDebug --no-daemon
-      - run: cp app/build/outputs/apk/debug/app-debug.apk WorkFlow-English-V1.apk
+      - run: cp app/build/outputs/apk/debug/app-debug.apk WorkFlow-English-V2.apk
       - uses: actions/upload-artifact@v4
         with:
-          name: WorkFlow-English-V1
-          path: WorkFlow-English-V1.apk
+          name: WorkFlow-English-V2
+          path: WorkFlow-English-V2.apk
           if-no-files-found: error

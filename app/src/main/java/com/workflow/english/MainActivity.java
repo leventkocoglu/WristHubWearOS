@@ -7,9 +7,15 @@ import android.content.Intent;
 import android.net.Uri;
 public class MainActivity extends Activity {
  private WebView web;
+ private android.speech.tts.TextToSpeech tts;
+ private boolean speechReady=false;
+ public class SpeechBridge { @android.webkit.JavascriptInterface public void speak(String text) { runOnUiThread(() -> { if(speechReady) tts.speak(text,android.speech.tts.TextToSpeech.QUEUE_FLUSH,null,"workflow"); else android.widget.Toast.makeText(MainActivity.this,"İngilizce ses hazır değil. Telefonun metin okuma ayarlarını kontrol et.",android.widget.Toast.LENGTH_LONG).show(); }); } }
  @Override public void onCreate(Bundle state) {
   super.onCreate(state);
+  tts=new android.speech.tts.TextToSpeech(this,status -> { if(status==android.speech.tts.TextToSpeech.SUCCESS) { int result=tts.setLanguage(java.util.Locale.UK); speechReady=result>=0; tts.setSpeechRate(0.86f); } });
   web = new WebView(this); setContentView(web);
+  web.addJavascriptInterface(new SpeechBridge(),"NativeSpeech");
+  web.setOnApplyWindowInsetsListener((view,insets) -> { view.setPadding(insets.getSystemWindowInsetLeft(),insets.getSystemWindowInsetTop(),insets.getSystemWindowInsetRight(),insets.getSystemWindowInsetBottom()); return insets; });
   web.getSettings().setJavaScriptEnabled(true);
   web.getSettings().setDomStorageEnabled(true);
   web.getSettings().setAllowFileAccess(false);
@@ -31,5 +37,5 @@ public class MainActivity extends Activity {
   web.loadUrl("https://app.local/index.html");
  }
  @Override public void onBackPressed() { if(web.canGoBack()) web.goBack(); else super.onBackPressed(); }
- @Override protected void onDestroy() { web.destroy(); super.onDestroy(); }
+ @Override protected void onDestroy() { if(tts!=null){tts.stop();tts.shutdown();} web.removeJavascriptInterface("NativeSpeech"); web.destroy(); super.onDestroy(); }
 }
