@@ -14,3 +14,5 @@ words(true);let id=wordOrder[0];gradeWord(true);assert(!state.cards[id],'reveal 
 assert(validBackup(JSON.parse(JSON.stringify(state))),'valid backup');assert(!validBackup({schema:2}),'invalid backup');settings();exportBackup();previewImport();assert(pendingImport,'import preview');let backup=$('backup').value;$('backup').value='{bad';previewImport();assert(pendingImport===null,'malformed backup');
 let r=englishChecklist('We is waiting for informations. We will reduce rework today.',['rework']);assert(r.action&&r.reason&&r.time&&r.hints.length===2,'English support');console.log('PASS V10 content, 8 engineering models and bounds, integer product mix, answers, rewards, campaign resume, reviews, backup, English');
 `,ctx);
+
+storage={"workflow-v1":JSON.stringify({xp:75,drafts:{0:"Legacy message"}})};const migrated={...ctx};vm.createContext(migrated);vm.runInContext(script,migrated);vm.runInContext("if(state.xp!==75||state.drafts.log0!=='Legacy message')throw Error('V2 migration')",migrated);console.log('PASS V2 XP/draft migration');
