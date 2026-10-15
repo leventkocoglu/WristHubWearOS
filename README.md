@@ -1,4 +1,4 @@
-# WorkFlow Engineer V20
+# WorkFlow Engineer V40
 
 Installs as an update to V10: same application ID `com.workflow.english.v10`, versionCode 20, same explicit fixed debug test key. Persistent store/schema remains backward-compatible with V10; existing problems, XP, notes and cards remain. V2 is a separate app identity and does not migrate automatically.
 
@@ -26,3 +26,13 @@ Core V10 content retained: 40 fixed cases, 12 lessons, 40 English phrases, two q
 Original educational content inspired by E. M. Goldratt's *What Is This Thing Called Theory of Constraints and How Should It Be Implemented?*; full book/exercises not copied. TOC: https://www.toc-goldratt.com/en/about-toc . Lean: https://www.lean.org/lexicon-terms/takt-time/ . OEE: https://www.oee.com/calculating-oee/ . User-supplied Birth–Death Processes notes informed queue topics.
 
 Build with JDK17, Gradle8.9, SDK35. Decode signing/debug-test.keystore.b64 to signing/debug-test.keystore before local builds; test key is public and not for production publishing. Run `node tests/logic.cjs`, install Playwright1.51.1/Chromium, run `node tests/ui.cjs`, then `gradle assembleDebug`. CI verifies all checks and the APK signature. Physical-device testing is separate.
+
+## V40 additions
+
+V40 keeps V20's package identity, fixed debug test signing key and schema10 store for an in-place update. It adds a two-product planning studio, three resources, an upfront materials+overtime budget, nominal demand caps and period fixed expenses. Each resource can receive 0/60/120 purchased overtime minutes. All nominal production is sold within nominal demand caps. Objective: period sales less material, purchased overtime and fixed period expense. The budget restricts only materials and overtime; the fixed expense is not in that upfront budget. Positive per-unit sales contributions allow exact enumeration over integer A quantities with maximum feasible B for each A; joint overtime optimization checks 27 combinations. It is not a general job-shop scheduler or arbitrary MILP solver. No setups, ordering, precedence, WIP or within-period due dates are represented in this module. The original V20 factory model remains separate.
+
+Four fixed scenarios cover changing resource pressure, a high-price product, a tight material budget and low market demand. Plans can be saved (last12), restored and compared. A marginal experiment adds60 free base resource minutes while holding the chosen overtime, budget and demand unchanged; this is a discrete counterfactual, not a formal shadow price.
+
+Risk analysis uses250 reproducible LCG-seeded samples: independent uniform demand multipliers0.8–1.2 rounded to units; independent base capacity multipliers0.75–1.10 floored to minutes. Purchased overtime is then added. Chosen A-first/B-first execution priority consumes realized resource capacities and caps production at planned quantities. Sales are capped at realized demand. Material cost is charged for all produced units, including unsold goods; no inventory valuation is credited to cash contribution. Quantiles are sorted-sample floor(p×249) order statistics. Result frequencies describe these assumed draws, not real-world probabilities, confidence intervals or guarantees. Same seed, plan and case reproduce the results.
+
+Three scripted management-English dialogues (nine turns) add first-completion rewards with duplicate protections. Twenty added terms append to the existing forty without moving indices. Old backups default the new studio record; new backups validate all plans, dialogue records and risk references. Tests cross-check the optimizer against independent exhaustive A/B/overtime enumeration, verify resource/budget/sales/cash bounds in all risk trials, and exercise UI state, comparison snapshots, dialogue resume, imports, both themes and large fonts.
