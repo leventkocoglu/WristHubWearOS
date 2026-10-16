@@ -1,5 +1,5 @@
 plugins { id 'com.android.application' }
 android { signingConfigs { debug { storeFile rootProject.file('signing/debug-test.keystore'); storePassword 'android'; keyAlias 'androiddebugkey'; keyPassword 'android' } }
  namespace 'com.workflow.english'; compileSdk 35
- defaultConfig { applicationId 'com.workflow.english.v10'; minSdk 26; targetSdk 35; versionCode 41; versionName '41.0' }
+ defaultConfig { applicationId 'com.workflow.english.v10'; minSdk 26; targetSdk 35; versionCode 42; versionName '42.0' }
 }
